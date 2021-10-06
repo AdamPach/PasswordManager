@@ -1,4 +1,5 @@
 ﻿using System;
+using PasswordManagerLib;
 
 namespace PasswordManager
 {
@@ -6,7 +7,7 @@ namespace PasswordManager
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            PasswordManagerCore ps = new PasswordManagerCore();
         }
     }
 }
