@@ -23,7 +23,7 @@ namespace PasswordManager
             {
                 if(!ps.IsLogged)
                 {
-                    LogIn(ps);
+                    NoLoggedPrompt(ps);
                 }
                 else
                 {
@@ -74,6 +74,35 @@ namespace PasswordManager
         static void LogOut(PasswordManagerCore ps)
         {
             ps.LogOut();
+        }
+
+        static void NoLoggedPrompt(PasswordManagerCore ps)
+        {
+            System.Console.Write($"{PromptPrefix}");
+            string command = Console.ReadLine().ToLower();
+
+            switch (command)
+            {
+                case "login":
+                {
+                    LogIn(ps);
+                    break;
+                }
+                case "add":
+                {
+                    AddAccount(ps);
+                    break;
+                }
+
+                default:
+                {
+                    System.Console.WriteLine("LogIn - Log into account");
+                    System.Console.WriteLine("Add - Create a new account");
+                    break;
+                };
+            }
+
+            System.Console.WriteLine();
         }
 
         static void LoggedPrompt(PasswordManagerCore ps)
