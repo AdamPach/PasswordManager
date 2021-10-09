@@ -138,7 +138,7 @@ namespace PasswordManager
                 }
                 case "add":
                 {
-                    System.Console.WriteLine("Adding a record");
+                    ps.AddRecord(new AccountRecord("Karel", "mojeheslo", "https://seznam.cz"));
                     break;
                 }
                 case "list":

@@ -82,6 +82,14 @@ namespace PasswordManagerLib
          this.loggedAccount = null;
       }
 
+
+      public bool AddRecord(AccountRecord newRecord)
+      {
+         this.loggedAccount.AddRecord(newRecord);
+         WriteAccountFile(this.AccountsSerializer, this.Accounts);
+         return true;
+      }
+
       ///<summary>
       ///Method for load Accounts from file
       ///</summary>
