@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using PasswordManagerLib;
 
 namespace PasswordManager
@@ -17,7 +18,7 @@ namespace PasswordManager
 
             PasswordManagerCore ps = new PasswordManagerCore();
 
-            if(ps.AccountsIsEmpty) AddAccount(ps);
+            if(!ps.AccountsIsEmpty) AddAccount(ps);
 
             while(ps.ProgramRunning)
             {
@@ -39,10 +40,22 @@ namespace PasswordManager
             System.Console.Write("Input Account Name: ");
             string name = Console.ReadLine();
 
-            System.Console.Write("Input Account Passord: ");
+            System.Console.Write("Input Account Password: ");
             string Password = Console.ReadLine();
 
             ps.CreateAccount(new Account(name, Password, name + ".xml"));
+        }
+
+        static void RemoveAccount(PasswordManagerCore ps)
+        {
+            if(ps.RemoveAccount())
+            {
+                System.Console.WriteLine("Succes deleted");
+            }
+            else
+            {
+                System.Console.WriteLine("Deleted faild!");
+            }
         }
 
         static void LogIn(PasswordManagerCore ps)
@@ -148,6 +161,11 @@ namespace PasswordManager
                     ps.Exit();
                     break;
                 }
+                case "delete":
+                {
+                    RemoveAccount(ps);
+                    break;
+                }
                 
                 default: 
                 {
@@ -166,6 +184,19 @@ namespace PasswordManager
             System.Console.WriteLine("List - Show all your accounts");
             System.Console.WriteLine("LogOut - LogOut");
             System.Console.WriteLine("Remove - Remove a password");
+            System.Console.WriteLine("Delete - Delete account");
+
+        }
+
+        static void PrintAllAccounts(List<Account> accounts)
+        {
+            int num = 1;
+
+            foreach (Account ac in accounts)
+            {
+                System.Console.WriteLine($"{num}: {ac.ToString()}");
+                num++;
+            }
 
         }
     }

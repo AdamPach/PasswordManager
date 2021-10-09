@@ -45,13 +45,20 @@ namespace PasswordManagerLib
          this.SaveAccounts();
       }
 
+      public bool RemoveAccount()
+      {
+         if(this.IsLogged && this.loggedAccount != null)
+         {
+            this.Accounts.Remove(this.loggedAccount);
+            this.loggedAccount = null;
+            this.IsLogged = false;
+            this.SaveAccounts();
+            return true;
+         }else return false;
+      }
+
       private void SaveAccounts()
       {
-         // using(XmlWriter xw = XmlWriter.Create(AccountFile))
-         // {
-         //    this.AccountsSerializer.Serialize(xw, this.Accounts);
-         // }
-
          WriteAccountFile(this.AccountsSerializer, this.Accounts);
       }
 
