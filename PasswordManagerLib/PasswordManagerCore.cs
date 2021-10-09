@@ -26,22 +26,20 @@ namespace PasswordManagerLib
          this.ProgramRunning = true;
          this.IsLogged = false;
 
-         try{
-         this.Accounts = (List<Account>)this.LoadAccounts();
+         this.Accounts = this.LoadAccounts();
 
-         }catch(Exception e)
-         {
-            System.Console.WriteLine("Exeption");
-         }
+         this.AccountsIsEmpty = this.Accounts.Count > 0 ? true : false;
 
-         this.AccountsIsEmpty = this.Accounts == null ? true : false;
-         if(this.AccountsIsEmpty)this.Accounts = new List<Account>();
+      }
+
+      public void Exit()
+      {
+         this.ProgramRunning = false;
       }
 
 
       public void CreateAccount(Account newAccount)
       {
-         System.Console.WriteLine(newAccount.ToString());
          this.Accounts.Add(newAccount);
          File.Create(Path.Combine(SaveDir, newAccount.FileName));
          this.SaveAccounts();
@@ -49,10 +47,12 @@ namespace PasswordManagerLib
 
       private void SaveAccounts()
       {
-         using(XmlWriter xw = XmlWriter.Create(AccountFile))
-         {
-            this.AccountsSerializer.Serialize(xw, this.Accounts);
-         }
+         // using(XmlWriter xw = XmlWriter.Create(AccountFile))
+         // {
+         //    this.AccountsSerializer.Serialize(xw, this.Accounts);
+         // }
+
+         WriteAccountFile(this.AccountsSerializer, this.Accounts);
       }
 
       public bool LogIn(int AccountIndex,string password)
@@ -75,19 +75,19 @@ namespace PasswordManagerLib
          this.loggedAccount = null;
       }
 
+      ///<summary>
+      ///Method for load Accounts from file
+      ///</summary>
       private List<Account> LoadAccounts()
       {
+         //Create a list
          List<Account> ac;
 
+            //Create a reader
             using(XmlReader reader = XmlReader.Create(AccountFile))
             {
-               try
-               {
-                  ac = (List<Account>)this.AccountsSerializer.Deserialize(reader);
-               }catch(InvalidOperationException e)
-               {
-                  ac = new List<Account>();
-               }
+               //Read from file
+               ac = (List<Account>)this.AccountsSerializer.Deserialize(reader);
             }
 
          return ac;
@@ -104,8 +104,7 @@ namespace PasswordManagerLib
        {
           //Create a dir and Accounts Folder
          Directory.CreateDirectory(SaveDir);
-         File.Create(AccountFile);
-         GC.Collect();
+         WriteAccountFile(new XmlSerializer(typeof(List<Account>)), new List<Account>());
          //Return true becouse you are creating dir
          return true;
        }
@@ -116,12 +115,24 @@ namespace PasswordManagerLib
           if(!File.Exists(AccountFile))
           {
              //Create a Accounts folder
-            File.Create(AccountFile);
-            GC.Collect();
+            WriteAccountFile(new XmlSerializer(typeof(List<Account>)), new List<Account>());
           }
          return false;
        }
       } 
+
+      ///<summary>
+      ///Static method for Write Accounts to save file
+      ///</summary>
+      private static void WriteAccountFile(XmlSerializer xmlSerializer, List<Account> accounts)
+      { 
+         //Create a xmlWriter
+         using(XmlWriter xmlWriter = XmlWriter.Create(AccountFile))
+         {
+            //Write into a account file
+            xmlSerializer.Serialize(xmlWriter, accounts);
+         }
+      }
 
    }
 }

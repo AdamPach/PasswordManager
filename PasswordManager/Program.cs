@@ -93,11 +93,17 @@ namespace PasswordManager
                     AddAccount(ps);
                     break;
                 }
+                case "exit":
+                {
+                    ps.Exit();
+                    break;
+                }
 
                 default:
                 {
                     System.Console.WriteLine("LogIn - Log into account");
                     System.Console.WriteLine("Add - Create a new account");
+                    System.Console.WriteLine("Exit - End of this program");
                     break;
                 };
             }
@@ -137,8 +143,17 @@ namespace PasswordManager
                     LogOut(ps);
                     break;
                 }
+                case "exit":
+                {
+                    ps.Exit();
+                    break;
+                }
                 
-                default: break;
+                default: 
+                {
+                    PrintHelp();
+                    break;
+                }
             }
             System.Console.WriteLine();
         }
@@ -147,9 +162,11 @@ namespace PasswordManager
         {
             System.Console.WriteLine("Help for PasswordManager");
             System.Console.WriteLine("Add - Add a password");
+            System.Console.WriteLine("Exit - End of this program");
             System.Console.WriteLine("List - Show all your accounts");
             System.Console.WriteLine("LogOut - LogOut");
             System.Console.WriteLine("Remove - Remove a password");
+
         }
     }
 }
