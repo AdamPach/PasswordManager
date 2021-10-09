@@ -9,8 +9,7 @@ namespace PasswordManagerLib
         public string Name { get; set; }
         public string Password { get; set; }
         public string FileName { get; set; }
-        [XmlArray]
-        public List<AccountRecord> Records { get; private set; }
+        public List<AccountRecord> Records { get;  set; }
 
         public Account(string Name, string Password, string FileName)
         {

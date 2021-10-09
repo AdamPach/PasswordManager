@@ -90,6 +90,14 @@ namespace PasswordManagerLib
          return true;
       }
 
+      public List<AccountRecord> ReadAllRecords()
+      {
+         if(this.IsLogged)
+         {
+            return this.loggedAccount.Records;
+         } else return new List<AccountRecord>();
+      }
+
       ///<summary>
       ///Method for load Accounts from file
       ///</summary>

@@ -58,6 +58,21 @@ namespace PasswordManager
             }
         }
 
+        static void AddRecord(PasswordManagerCore ps)
+        {
+            System.Console.WriteLine();
+            System.Console.Write("Enter a url: ");
+            string url = Console.ReadLine();
+
+            System.Console.Write("Enter a Username: ");
+            string username = Console.ReadLine();
+
+            System.Console.Write("Enter a Password: ");
+            string password = Console.ReadLine();
+
+            ps.AddRecord(new AccountRecord(username, password, url));
+        }
+
         static void LogIn(PasswordManagerCore ps)
         {
             int count = 0;
@@ -138,12 +153,12 @@ namespace PasswordManager
                 }
                 case "add":
                 {
-                    ps.AddRecord(new AccountRecord("Karel", "mojeheslo", "https://seznam.cz"));
+                    AddRecord(ps);
                     break;
                 }
                 case "list":
                 {
-                    System.Console.WriteLine("Listing all acounts");
+                    PrintAllRecords(ps);
                     break;
                 }
                 case "remove":
@@ -198,6 +213,18 @@ namespace PasswordManager
                 num++;
             }
 
+        }
+
+        static void PrintAllRecords(PasswordManagerCore ps)
+        {
+            System.Console.WriteLine();
+            System.Console.WriteLine("All your records\n");
+            foreach(AccountRecord ar in ps.ReadAllRecords())
+            {
+                System.Console.WriteLine($"{ar.Server}: ");
+                System.Console.WriteLine($"\tUsername: {ar.Username}");
+                System.Console.WriteLine($"\tPassword: {ar.Password}\n");
+            }
         }
     }
 }
