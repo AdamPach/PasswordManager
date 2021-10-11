@@ -64,13 +64,17 @@ namespace PasswordManager
             System.Console.Write("Enter a url: ");
             string url = Console.ReadLine();
 
+            System.Console.Write("Enter a Service Name: ");
+            string ServiceName = Console.ReadLine();
+
             System.Console.Write("Enter a Username: ");
             string username = Console.ReadLine();
 
             System.Console.Write("Enter a Password: ");
             string password = Console.ReadLine();
 
-            ps.AddRecord(new AccountRecord(username, password, url));
+
+            ps.AddRecord(new AccountRecord(username, password, url, ServiceName));
         }
 
         static void LogIn(PasswordManagerCore ps)
@@ -222,6 +226,7 @@ namespace PasswordManager
             foreach(AccountRecord ar in ps.ReadAllRecords())
             {
                 System.Console.WriteLine($"{ar.Server}: ");
+                System.Console.WriteLine($"\tService Name: {ar.ServiceName}");
                 System.Console.WriteLine($"\tUsername: {ar.Username}");
                 System.Console.WriteLine($"\tPassword: {ar.Password}\n");
             }
