@@ -6,8 +6,8 @@ using System.Collections.Generic;
 
 namespace PasswordManagerLib
 {
-   public class PasswordManagerCore
-   {
+    public class PasswordManagerCore
+    {
       //Static 
       private static readonly string SaveDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager");
       private static readonly string AccountFile = Path.Combine(SaveDir, "Accounts.xml");
@@ -31,18 +31,29 @@ namespace PasswordManagerLib
 
       }
 
+        /// <summary>
+        /// Method for exit a program
+        /// </summary>
       public void Exit()
       {
          this.ProgramRunning = false;
       }
 
-
+        /// <summary>
+        /// Method for create a new account
+        /// </summary>
+        /// <param name="newAccount">Account which you want add</param>
       public void CreateAccount(Account newAccount)
       {
          this.Accounts.Add(newAccount);
          this.SaveAccounts();
       }
 
+
+        /// <summary>
+        /// If you logged remove this account
+        /// </summary>
+        /// <returns>If account is remove return true</returns>
       public bool RemoveAccount()
       {
             if (this.IsLogged && this.loggedAccount != null)
@@ -55,47 +66,77 @@ namespace PasswordManagerLib
             }
             else throw new NotLoggedExeption("You are not auth!");
       }
-
-      private void SaveAccounts()
-      {
-         WriteAccountFile(this.AccountsSerializer, this.Accounts);
-      }
-
-      public bool LogIn(int AccountIndex,string password)
-      {
-         if(this.Accounts[AccountIndex].Password.ComparePasswords(password))
-         {
-            this.IsLogged = true;
-            this.loggedAccount = this.Accounts[AccountIndex];
-            return true;
-         }
-         else
-         {
-            return false;
-         }
-      }
-
-      public void LogOut()
-      {
-         this.IsLogged = false;
-         this.loggedAccount = null;
-      }
-
-
-      public bool AddRecord(AccountRecord newRecord)
-      {
-         this.loggedAccount.AddRecord(newRecord);
-         WriteAccountFile(this.AccountsSerializer, this.Accounts);
-         return true;
-      }
-
-      public List<AccountRecord> ReadAllRecords()
-      {
-         if(this.IsLogged)
-         {
-            return this.loggedAccount.Records;
-         } else throw new NotLoggedExeption("You are not auth!");
+        /// <summary>
+        /// Save all accounts
+        /// </summary>
+        private void SaveAccounts()
+        {
+            WriteAccountFile(this.AccountsSerializer, this.Accounts);
         }
+
+
+        /// <summary>
+        /// Method for log in into your account
+        /// </summary>
+        /// <param name="AccountIndex">Accunt index in list</param>
+        /// <param name="password">Password to compare</param>
+        /// <returns>If you log succesfull return true</returns>
+        public bool LogIn(int AccountIndex,string password)
+        {
+             if(this.Accounts[AccountIndex].Password.ComparePasswords(password))
+             {
+                this.IsLogged = true;
+                this.loggedAccount = this.Accounts[AccountIndex];
+                return true;
+             }
+             else
+             {
+                return false;
+             }
+        }
+
+        /// <summary>
+        /// Method for logged out
+        /// </summary>
+        public void LogOut()
+        {
+             this.IsLogged = false;
+             this.loggedAccount = null;
+        }
+
+        /// <summary>
+        /// Met
+        /// </summary>
+        /// <param name="newRecord"></param>
+        /// <returns></returns>
+        public bool AddRecord(AccountRecord newRecord)
+        {
+            if (this.IsLogged)
+            {
+                this.loggedAccount.AddRecord(newRecord);
+                WriteAccountFile(this.AccountsSerializer, this.Accounts);
+                return true;
+            }
+            else throw new NotLoggedExeption("");
+        }
+
+        /// <summary>
+        /// Method return all record for your account
+        /// </summary>
+        /// <returns>All records</returns>
+        public List<AccountRecord> ReadAllRecords()
+        {
+             if(this.IsLogged)
+             {
+                return this.loggedAccount.Records;
+             } else throw new NotLoggedExeption("You are not auth!");
+        }
+
+        /// <summary>
+        ///     Retuen all matched records
+        /// </summary>
+        /// <param name="serviceName">Searching name</param>
+        /// <returns>All results</returns>
 
        public IEnumerable<AccountRecord> GetSearchedAccounts(string serviceName)
         {
@@ -135,43 +176,43 @@ namespace PasswordManagerLib
    ///<summary>
    ///Return true if Save Directory dont exits. Create a Save Direcory
    ///</summary>
-    public static bool CreateDirectoryForSave()
-      {
+        public static bool CreateDirectoryForSave()
+        {
 
-      //Check if Dir exist
-       if(!Directory.Exists(SaveDir))
-       {
-          //Create a dir and Accounts Folder
-         Directory.CreateDirectory(SaveDir);
-         WriteAccountFile(new XmlSerializer(typeof(List<Account>)), new List<Account>());
-         //Return true becouse you are creating dir
-         return true;
-       }
-       else
-       {
-          //If Dir exist
-          //Check if Accounts File dont exist
-          if(!File.Exists(AccountFile))
-          {
-             //Create a Accounts folder
-            WriteAccountFile(new XmlSerializer(typeof(List<Account>)), new List<Account>());
-          }
-         return false;
-       }
-      } 
+            //Check if Dir exist
+           if(!Directory.Exists(SaveDir))
+           {
+              //Create a dir and Accounts Folder
+             Directory.CreateDirectory(SaveDir);
+             WriteAccountFile(new XmlSerializer(typeof(List<Account>)), new List<Account>());
+             //Return true becouse you are creating dir
+             return true;
+           }
+           else
+           {
+              //If Dir exist
+              //Check if Accounts File dont exist
+              if(!File.Exists(AccountFile))
+              {
+                 //Create a Accounts folder
+                WriteAccountFile(new XmlSerializer(typeof(List<Account>)), new List<Account>());
+              }
+             return false;
+           }
+        } 
 
       ///<summary>
       ///Static method for Write Accounts to save file
       ///</summary>
-      private static void WriteAccountFile(XmlSerializer xmlSerializer, List<Account> accounts)
-      { 
-         //Create a xmlWriter
-         using(XmlWriter xmlWriter = XmlWriter.Create(AccountFile))
-         {
-            //Write into a account file
-            xmlSerializer.Serialize(xmlWriter, accounts);
-         }
-      }
+        private static void WriteAccountFile(XmlSerializer xmlSerializer, List<Account> accounts)
+        { 
+             //Create a xmlWriter
+             using(XmlWriter xmlWriter = XmlWriter.Create(AccountFile))
+             {
+                //Write into a account file
+                xmlSerializer.Serialize(xmlWriter, accounts);
+             }
+        }
 
-   }
+    }
 }
