@@ -15,7 +15,6 @@ namespace PasswordManagerLib
       //Properties
       public bool ProgramRunning { get; private set; }
       public bool IsLogged { get; private set; }
-      [XmlArray("Accounts")]
       public List<Account> Accounts { get; private set; }
       public bool AccountsIsEmpty { get; private set; }
       private XmlSerializer AccountsSerializer = new XmlSerializer(typeof(List<Account>));
@@ -41,20 +40,20 @@ namespace PasswordManagerLib
       public void CreateAccount(Account newAccount)
       {
          this.Accounts.Add(newAccount);
-         File.Create(Path.Combine(SaveDir, newAccount.FileName));
          this.SaveAccounts();
       }
 
       public bool RemoveAccount()
       {
-         if(this.IsLogged && this.loggedAccount != null)
-         {
-            this.Accounts.Remove(this.loggedAccount);
-            this.loggedAccount = null;
-            this.IsLogged = false;
-            this.SaveAccounts();
-            return true;
-         }else return false;
+            if (this.IsLogged && this.loggedAccount != null)
+            {
+                this.Accounts.Remove(this.loggedAccount);
+                this.loggedAccount = null;
+                this.IsLogged = false;
+                this.SaveAccounts();
+                return true;
+            }
+            else throw new NotLoggedExeption("You are not auth!");
       }
 
       private void SaveAccounts()
@@ -64,7 +63,7 @@ namespace PasswordManagerLib
 
       public bool LogIn(int AccountIndex,string password)
       {
-         if(this.Accounts[AccountIndex].Password == password)
+         if(this.Accounts[AccountIndex].Password.ComparePasswords(password))
          {
             this.IsLogged = true;
             this.loggedAccount = this.Accounts[AccountIndex];
@@ -95,8 +94,25 @@ namespace PasswordManagerLib
          if(this.IsLogged)
          {
             return this.loggedAccount.Records;
-         } else return new List<AccountRecord>();
-      }
+         } else throw new NotLoggedExeption("You are not auth!");
+        }
+
+       public IEnumerable<AccountRecord> GetSearchedAccounts(string serviceName)
+        {
+            if (IsLogged)
+            {
+                try
+                {
+                    return this.loggedAccount.Search(serviceName);
+
+                }catch(KeyNotFoundException e)
+                {
+                    return new List<AccountRecord>();
+                }
+            }
+            else throw new NotLoggedExeption("You are not auth!");
+
+        }
 
       ///<summary>
       ///Method for load Accounts from file

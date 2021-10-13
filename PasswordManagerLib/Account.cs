@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using System.Linq;
 
 namespace PasswordManagerLib
 {
+    
     public class Account
     {
         public string Name { get; set; }
-        public string Password { get; set; }
+        public AccountPassword Password { get; set; }
         public string FileName { get; set; }
+
         public List<AccountRecord> Records { get;  set; }
 
         public Account(string Name, string Password, string FileName)
@@ -31,6 +34,15 @@ namespace PasswordManagerLib
             this.Records.Add(newRecord);
         }
 
+        public IEnumerable<AccountRecord>Search(string ServiceName)
+        {
+            var searched = from ar in this.Records
+                           where ar.ServiceName.ToLower() == ServiceName.ToLower()
+                           select ar;
 
+            if (searched.Count() == 0) throw new KeyNotFoundException("We cant find any results!");
+
+            return searched;
+        }
     }
 }

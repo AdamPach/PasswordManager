@@ -22,13 +22,19 @@ namespace PasswordManager
 
             while(ps.ProgramRunning)
             {
-                if(!ps.IsLogged)
+                try
                 {
-                    NoLoggedPrompt(ps);
-                }
-                else
+                    if(!ps.IsLogged)
+                    {
+                        NoLoggedPrompt(ps);
+                    }
+                    else
+                    {
+                        LoggedPrompt(ps);
+                    }
+                }catch(NotLoggedExeption e)
                 {
-                    LoggedPrompt(ps);
+                    ps.LogOut();
                 }
 
             }
@@ -185,6 +191,11 @@ namespace PasswordManager
                     RemoveAccount(ps);
                     break;
                 }
+                case "search":
+                    {
+                        SearchRecord(ps);
+                        break;
+                    }
                 
                 default: 
                 {
@@ -203,6 +214,7 @@ namespace PasswordManager
             System.Console.WriteLine("List - Show all your accounts");
             System.Console.WriteLine("LogOut - LogOut");
             System.Console.WriteLine("Remove - Remove a password");
+            Console.WriteLine("Search - Search specific Service name");
             System.Console.WriteLine("Delete - Delete account");
 
         }
@@ -225,10 +237,27 @@ namespace PasswordManager
             System.Console.WriteLine("All your records\n");
             foreach(AccountRecord ar in ps.ReadAllRecords())
             {
-                System.Console.WriteLine($"{ar.Server}: ");
-                System.Console.WriteLine($"\tService Name: {ar.ServiceName}");
-                System.Console.WriteLine($"\tUsername: {ar.Username}");
-                System.Console.WriteLine($"\tPassword: {ar.Password}\n");
+                PrintRecord(ar);
+            }
+        }
+
+        static void PrintRecord(AccountRecord ar)
+        {
+            System.Console.WriteLine($"{ar.Server}: ");
+            System.Console.WriteLine($"\tService Name: {ar.ServiceName}");
+            System.Console.WriteLine($"\tUsername: {ar.Username}");
+            System.Console.WriteLine($"\tPassword: {ar.Password}\n");
+        }
+
+        static void SearchRecord(PasswordManagerCore ps)
+        {
+            Console.WriteLine();
+            Console.Write("Enter a searching service name: ");
+            string serviceName = Console.ReadLine();
+
+            foreach (var ar in ps.GetSearchedAccounts(serviceName))
+            {
+                PrintRecord(ar);
             }
         }
     }
