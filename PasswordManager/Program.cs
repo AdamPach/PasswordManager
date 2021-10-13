@@ -76,8 +76,7 @@ namespace PasswordManager
             System.Console.Write("Enter a Username: ");
             string username = Console.ReadLine();
 
-            System.Console.Write("Enter a Password: ");
-            string password = Console.ReadLine();
+            string password = ReturnValidPassword();
 
 
             ps.AddRecord(new AccountRecord(username, password, url, ServiceName));
@@ -85,28 +84,38 @@ namespace PasswordManager
 
         static void LogIn(PasswordManagerCore ps)
         {
-            int count = 0;
+            int count = 0, AccountNumber;
+
+            if (ps.Accounts.Count == 0)
+            {
+                Console.WriteLine("There is no accounts!");
+                return;
+            }
+
             foreach (Account ac in ps.Accounts)
             {
                 count++;
                 System.Console.WriteLine($"{count}. {ac.Name}");
             }
+
             System.Console.WriteLine();
 
-            int AccountNumber;
-            bool parseGood;
+            bool ParseGood;
+
             do
             {
                 System.Console.Write("Input Account number: ");
-                parseGood = int.TryParse(Console.ReadLine(), out AccountNumber);
-            } while (!parseGood);
+                ParseGood = int.TryParse(Console.ReadLine(), out AccountNumber);
+            } while (!(ParseGood && (AccountNumber > 0 && AccountNumber <= ps.Accounts.Count)));
 
             AccountNumber -= 1;
 
-            System.Console.Write("Input Password: ");
+            string password = ReturnValidPassword();
 
-            string password = Console.ReadLine();
-            if(ps.LogIn(AccountNumber, password))System.Console.WriteLine("You logged in!");
+            if(ps.LogIn(AccountNumber, password))
+                Console.WriteLine("You are logged in");
+            else
+                Console.WriteLine("Incorect Password");
         }
 
         static void LogOut(PasswordManagerCore ps)
@@ -122,28 +131,28 @@ namespace PasswordManager
             switch (command)
             {
                 case "login":
-                {
-                    LogIn(ps);
-                    break;
-                }
+                    {
+                        LogIn(ps);
+                        break;
+                    }
                 case "add":
-                {
-                    AddAccount(ps);
-                    break;
-                }
+                    {
+                        AddAccount(ps);
+                        break;
+                    }
                 case "exit":
-                {
-                    ps.Exit();
-                    break;
-                }
+                    {
+                        ps.Exit();
+                        break;
+                    }
 
                 default:
-                {
-                    System.Console.WriteLine("LogIn - Log into account");
-                    System.Console.WriteLine("Add - Create a new account");
-                    System.Console.WriteLine("Exit - End of this program");
-                    break;
-                };
+                    {
+                        System.Console.WriteLine("LogIn - Log into account");
+                        System.Console.WriteLine("Add - Create a new account");
+                        System.Console.WriteLine("Exit - End of this program");
+                        break;
+                    };
             }
 
             System.Console.WriteLine();
@@ -157,40 +166,40 @@ namespace PasswordManager
             switch (command)
             {
                 case "help":
-                {
-                    PrintHelp();
-                    break;
-                }
+                    {
+                        PrintHelp();
+                        break;
+                    }
                 case "add":
-                {
-                    AddRecord(ps);
-                    break;
-                }
+                    {
+                        AddRecord(ps);
+                        break;
+                    }
                 case "list":
-                {
-                    PrintAllRecords(ps);
-                    break;
-                }
+                    {
+                        PrintAllRecords(ps);
+                        break;
+                    }
                 case "remove":
-                {
-                    System.Console.WriteLine("Removing a password");
-                    break;
-                }
+                    {
+                        System.Console.WriteLine("Removing a password");
+                        break;
+                    }
                 case "logout":
-                {
-                    LogOut(ps);
-                    break;
-                }
+                    {
+                        LogOut(ps);
+                        break;
+                    }
                 case "exit":
-                {
-                    ps.Exit();
-                    break;
-                }
+                    {
+                        ps.Exit();
+                        break;
+                    }
                 case "delete":
-                {
-                    RemoveAccount(ps);
-                    break;
-                }
+                    {
+                        RemoveAccount(ps);
+                        break;
+                    }
                 case "search":
                     {
                         SearchRecord(ps);
@@ -198,10 +207,10 @@ namespace PasswordManager
                     }
                 
                 default: 
-                {
-                    PrintHelp();
-                    break;
-                }
+                    {
+                        PrintHelp();
+                        break;
+                    }
             }
             System.Console.WriteLine();
         }
@@ -259,6 +268,22 @@ namespace PasswordManager
             {
                 PrintRecord(ar);
             }
+        }
+
+        static string ReturnValidPassword()
+        {
+            Console.Write("Enter valid password: ");
+            string password = Console.ReadLine();
+
+            while(password == "")
+            {
+                Console.WriteLine();
+                Console.WriteLine("Invalid password!");
+                Console.Write("Enter valid password: ");
+                password = Console.ReadLine();
+            }
+
+            return password;
         }
     }
 }
