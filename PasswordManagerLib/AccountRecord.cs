@@ -17,5 +17,10 @@ namespace PasswordManagerLib
             this.Server = Server;
             this.ServiceName = ServiceName;
         }
+
+        public override string ToString()
+        {
+            return $"Service: {ServiceName}\n\tServer: {Server}\n\tUsername: {Username}\n\tPassword: {Password}\n";
+        }
     }
 }

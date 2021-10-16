@@ -34,6 +34,11 @@ namespace PasswordManagerLib
             this.Records.Add(newRecord);
         }
 
+        public void RemoveRecord(int RecordIndex)
+        {
+            this.Records.RemoveAt(RecordIndex);
+        }
+
         public IEnumerable<AccountRecord>Search(string ServiceName)
         {
             var searched = from ar in this.Records

@@ -129,6 +129,17 @@ namespace PasswordManagerLib
             else throw new NotLoggedExeption("");
         }
 
+        public bool RemoveRecod(int RecordIndex)
+        {
+            if (IsLogged)
+            {
+                this.loggedAccount.RemoveRecord(RecordIndex);
+                WriteAccountFile(this.AccountsSerializer, this.Accounts);
+                return true;
+            }
+            else throw new NotLoggedExeption("");
+        }
+
         /// <summary>
         /// Method return all record for your account
         /// </summary>

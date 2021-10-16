@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using PasswordManagerLib;
 
@@ -81,7 +82,7 @@ namespace PasswordManager
             string username = Console.ReadLine();
 
             Console.Write("Enter password: ");
-            string password = ReturnValidPassword();
+            string password = Console.ReadLine();
 
 
             ps.AddRecord(new AccountRecord(username, password, url, ServiceName));
@@ -188,7 +189,7 @@ namespace PasswordManager
                     }
                 case "remove":
                     {
-                        System.Console.WriteLine("Removing a password");
+                        RemoveRecord(ps);
                         break;
                     }
                 case "logout":
@@ -256,6 +257,27 @@ namespace PasswordManager
             }
         }
 
+        static int ReturnIndexInList<T>(T list, string message) where T : IEnumerable
+        {
+            int count = 0, index;
+
+            foreach (var item in list)
+            {
+                count++;
+                Console.WriteLine($"{count} - {item}");
+            }
+
+            bool ParseGood;
+
+            do
+            {
+                Console.Write(message);
+                ParseGood = int.TryParse(Console.ReadLine(), out index);
+            } while (!(ParseGood && (index > 0 && index <= count)));
+
+            return index - 1;
+        }
+
         static void PrintRecord(AccountRecord ar)
         {
             System.Console.WriteLine($"{ar.Server}: ");
@@ -273,6 +295,14 @@ namespace PasswordManager
             foreach (var ar in ps.GetSearchedAccounts(serviceName))
             {
                 PrintRecord(ar);
+            }
+        }
+
+        static void RemoveRecord(PasswordManagerCore ps)
+        {
+            if (ps.RemoveRecod(ReturnIndexInList<List<AccountRecord>>(ps.ReadAllRecords(), "Enter index of record: "))) 
+            {
+                Console.WriteLine("Record is Removed!");
             }
         }
 
