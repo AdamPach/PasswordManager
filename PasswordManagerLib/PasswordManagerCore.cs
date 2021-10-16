@@ -8,64 +8,73 @@ namespace PasswordManagerLib
 {
     public class PasswordManagerCore
     {
-      //Static 
-      private static readonly string SaveDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager");
-      private static readonly string AccountFile = Path.Combine(SaveDir, "Accounts.xml");
+        //Static 
+        private static readonly string SaveDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager");
+        private static readonly string AccountFile = Path.Combine(SaveDir, "Accounts.xml");
 
-      //Properties
-      public bool ProgramRunning { get; private set; }
-      public bool IsLogged { get; private set; }
-      public List<Account> Accounts { get; private set; }
-      public bool AccountsIsEmpty { get; private set; }
-      private XmlSerializer AccountsSerializer = new XmlSerializer(typeof(List<Account>));
-      public Account loggedAccount { get; private set; }
+        //Properties
+        public bool ProgramRunning { get; private set; }
+        public bool IsLogged { get; private set; }
+        public List<Account> Accounts { get; private set; }
+        public bool AccountsIsEmpty { get; private set; }
+        private XmlSerializer AccountsSerializer = new XmlSerializer(typeof(List<Account>));
+        public Account loggedAccount { get; private set; }
 
-      public PasswordManagerCore()
-      {
-         this.ProgramRunning = true;
-         this.IsLogged = false;
+        public PasswordManagerCore()
+        {
+            this.ProgramRunning = true;
+            this.IsLogged = false;
 
-         this.Accounts = this.LoadAccounts();
+            this.Accounts = this.LoadAccounts();
 
-         this.AccountsIsEmpty = this.Accounts.Count > 0 ? true : false;
+            this.AccountsIsEmpty = this.Accounts.Count > 0 ? true : false;
 
-      }
+        } 
 
         /// <summary>
         /// Method for exit a program
         /// </summary>
-      public void Exit()
-      {
+        public void Exit()
+        {
          this.ProgramRunning = false;
-      }
+        }
 
-        /// <summary>
-        /// Method for create a new account
-        /// </summary>
-        /// <param name="newAccount">Account which you want add</param>
-      public void CreateAccount(Account newAccount)
-      {
-         this.Accounts.Add(newAccount);
-         this.SaveAccounts();
-      }
-
-
-        /// <summary>
-        /// If you logged remove this account
-        /// </summary>
-        /// <returns>If account is remove return true</returns>
-      public bool RemoveAccount()
-      {
-            if (this.IsLogged && this.loggedAccount != null)
+          /// <summary>
+          /// Method for create a new account
+          /// </summary>
+          /// <param name="newAccount">Account which you want add</param>
+          public bool CreateAccount(string name, string password)
+          {
+            try
             {
-                this.Accounts.Remove(this.loggedAccount);
-                this.loggedAccount = null;
-                this.IsLogged = false;
+                Account newAccount = new Account(name, password, name + ".xml");
+                this.Accounts.Add(newAccount);
                 this.SaveAccounts();
-                return true;
+            }catch(IsInvalidPasswordExeption e)
+            {
+                return false;
             }
-            else throw new NotLoggedExeption("You are not auth!");
-      }
+
+                return true;
+          }
+
+
+           /// <summary>
+          /// If you logged remove this account
+          /// </summary>
+          /// <returns>If account is remove return true</returns>
+          public bool RemoveAccount()
+          {
+                if (this.IsLogged && this.loggedAccount != null)
+                {
+                    this.Accounts.Remove(this.loggedAccount);
+                    this.loggedAccount = null;
+                    this.IsLogged = false;
+                    this.SaveAccounts();
+                    return true;
+                }
+                else throw new NotLoggedExeption("You are not auth!");
+          }
         /// <summary>
         /// Save all accounts
         /// </summary>
@@ -201,17 +210,19 @@ namespace PasswordManagerLib
            }
         } 
 
-      ///<summary>
-      ///Static method for Write Accounts to save file
-      ///</summary>
+          ///<summary>
+          ///Static method for Write Accounts to save file
+          ///</summary>
         private static void WriteAccountFile(XmlSerializer xmlSerializer, List<Account> accounts)
-        { 
-             //Create a xmlWriter
-             using(XmlWriter xmlWriter = XmlWriter.Create(AccountFile))
-             {
+        {
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            //Create a xmlWriter
+            using(XmlWriter xmlWriter = XmlWriter.Create(AccountFile, settings))
+            {
                 //Write into a account file
                 xmlSerializer.Serialize(xmlWriter, accounts);
-             }
+            }
         }
 
     }

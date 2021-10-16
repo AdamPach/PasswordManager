@@ -42,14 +42,18 @@ namespace PasswordManager
 
         static void AddAccount(PasswordManagerCore ps)
         {
-            System.Console.WriteLine("You are creating a account");
-            System.Console.Write("Input Account Name: ");
-            string name = Console.ReadLine();
+            string name, Password;
+            do
+            {
+                System.Console.WriteLine("You are creating a account");
+                System.Console.Write("Input Account Name: ");
+                name = Console.ReadLine();
 
-            System.Console.Write("Input Account Password: ");
-            string Password = Console.ReadLine();
+                System.Console.Write("Input Account Password: ");
+                Password = ReturnValidPassword();
 
-            ps.CreateAccount(new Account(name, Password, name + ".xml"));
+            } while (!ps.CreateAccount(name, Password));
+            
         }
 
         static void RemoveAccount(PasswordManagerCore ps)
@@ -76,6 +80,7 @@ namespace PasswordManager
             System.Console.Write("Enter a Username: ");
             string username = Console.ReadLine();
 
+            Console.Write("Enter password: ");
             string password = ReturnValidPassword();
 
 
@@ -110,7 +115,8 @@ namespace PasswordManager
 
             AccountNumber -= 1;
 
-            string password = ReturnValidPassword();
+            Console.Write("Input your password: ");
+            string password = Console.ReadLine();
 
             if(ps.LogIn(AccountNumber, password))
                 Console.WriteLine("You are logged in");
@@ -272,10 +278,9 @@ namespace PasswordManager
 
         static string ReturnValidPassword()
         {
-            Console.Write("Enter valid password: ");
             string password = Console.ReadLine();
 
-            while(password == "")
+            while (!AccountPassword.IsValidPassword(password))
             {
                 Console.WriteLine();
                 Console.WriteLine("Invalid password!");

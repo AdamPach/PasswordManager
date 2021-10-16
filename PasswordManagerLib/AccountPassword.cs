@@ -1,6 +1,8 @@
+using System;
 using System.Xml.Serialization;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace PasswordManagerLib
 {
@@ -8,10 +10,13 @@ namespace PasswordManagerLib
     {
         //Propeties
 
+        [XmlAttribute("Hash")]
         public string password { get; set; }
 
         public AccountPassword(string password)
         {
+            if (!IsValidPassword(password))
+                throw new IsInvalidPasswordExeption();
             this.password = GetHashedPassword(password);
         }
 
@@ -48,6 +53,13 @@ namespace PasswordManagerLib
             }
 
             return builder.ToString();
+        }
+
+        public static bool IsValidPassword(string newPassword)
+        {
+            Regex rx = new Regex(@"^[a-zA-Z0-9]{8,}$");
+
+            return rx.IsMatch(newPassword);
         }
     }
 }
