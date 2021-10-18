@@ -18,6 +18,26 @@ namespace PasswordManagerLib
             this.ServiceName = ServiceName;
         }
 
+        public void EditRecord(string newServer, string newServiceName, string newUsername, string newPassword)
+        {
+            if (newServer != "")
+            {
+                Server = newServer;
+            }
+            if (newServiceName != "")
+            {
+                ServiceName = newServiceName;
+            }
+            if (newUsername != "")
+            {
+                Username = newUsername;
+            }
+            if (newPassword != "")
+            {
+                Password = newPassword;
+            }
+        }
+
         public override string ToString()
         {
             return $"Service: {ServiceName}\n\tServer: {Server}\n\tUsername: {Username}\n\tPassword: {Password}\n";

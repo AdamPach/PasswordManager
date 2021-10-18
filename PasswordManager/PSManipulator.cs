@@ -39,21 +39,32 @@ namespace PasswordManager
 
         public static void LogIn(PasswordManagerCore ps)
         {
-            if (ps.Accounts.Count == 0)
+            try
             {
-                Console.WriteLine("There is no accounts!");
+                if (ps.Accounts.Count == 0)
+                {
+                    Console.WriteLine("There is no accounts!");
+                    return;
+                }
+
+                int index = Printing.PrintCollectionAndReturnIndexInList(ps.Accounts, "Enter Account number: ");
+
+                Console.Write("Input your password: ");
+                string password = EnterPassword();
+
+                if (ps.LogIn(index, password))
+                    Console.WriteLine("You are logged in");
+                else
+                    Console.WriteLine("Incorect Password");
+            }
+            catch (ArgumentNullException)
+            {
+                Console.WriteLine("There is no account!");
+            }
+            catch (ExitExeption)
+            {
                 return;
             }
-
-            int index = Printing.PrintCollectionAndReturnIndexInList(ps.Accounts, "Enter Account number: ");
-
-            Console.Write("Input your password: ");
-            string password = EnterPassword();
-
-            if (ps.LogIn(index, password))
-                Console.WriteLine("You are logged in");
-            else
-                Console.WriteLine("Incorect Password");
         }
 
         public static void LogOut(PasswordManagerCore ps)
@@ -96,9 +107,53 @@ namespace PasswordManager
 
         public static void RemoveRecord(PasswordManagerCore ps)
         {
-            if (ps.RemoveRecod(Printing.PrintCollectionAndReturnIndexInList(ps.ReadAllRecords(), "Enter index of record: ")))
+            try
             {
-                Console.WriteLine("Record is Removed!");
+                if (ps.RemoveRecod(Printing.PrintCollectionAndReturnIndexInList(ps.ReadAllRecords(), "Enter index of record: ")))
+                {
+                    Console.WriteLine("Record is Removed!");
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                Console.WriteLine("You dont have any record");
+            }
+            catch (ExitExeption)
+            {
+                return;
+            }
+        }
+
+        public static void EditRecord(PasswordManagerCore ps)
+        {
+            try
+            {
+                int index = Printing.PrintCollectionAndReturnIndexInList(ps.ReadAllRecords(), "Enter index of record: ");
+                Console.WriteLine();
+                Console.WriteLine("Enter empty string if you wouldnt change this record!");
+
+                Console.Write("Enter new Server: ");
+                string newServer = Console.ReadLine();
+
+                Console.Write("Enter new Service name: ");
+                string newService = Console.ReadLine();
+
+                Console.Write("Enter new Username: ");
+                string newUsername = Console.ReadLine();
+
+                Console.Write("Enter new password: ");
+                string newPassword = Console.ReadLine();
+
+                ps.EditRecordOnIndex(index, newServer, newService, newUsername, newPassword);
+
+            }
+            catch (ArgumentNullException)
+            {
+                Console.WriteLine("You dont have any record!");
+            }
+            catch (ExitExeption)
+            {
+                return;
             }
         }
 

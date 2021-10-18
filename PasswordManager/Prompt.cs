@@ -91,6 +91,11 @@ namespace PasswordManager
                         PSManipulator.SearchRecord(ps);
                         break;
                     }
+                case "edit":
+                    {
+                        PSManipulator.EditRecord(ps);
+                        break;
+                    }
 
                 default:
                     {

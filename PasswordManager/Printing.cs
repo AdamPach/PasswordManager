@@ -23,6 +23,7 @@ namespace PasswordManager
                 System.Console.WriteLine("LogOut - LogOut");
                 System.Console.WriteLine("Remove - Remove a password");
                 Console.WriteLine("Search - Search specific Service name");
+                Console.WriteLine("Edit - Edit specific record");
                 System.Console.WriteLine("Delete - Delete this account");
             }
             else
@@ -36,6 +37,7 @@ namespace PasswordManager
 
         public static int PrintCollectionAndReturnIndexInList<T>(T list, string message) where T : IEnumerable
         {
+
             int count = 0, index;
             Console.WriteLine();
 
@@ -45,13 +47,21 @@ namespace PasswordManager
                 Console.WriteLine($"{count} - {item}");
             }
 
+            if (count == 0)
+                throw new ArgumentNullException("List is empty");
+
             bool ParseGood;
+
+            Console.WriteLine("\nFor exit this part enter 0");
 
             do
             {
                 Console.Write(message);
                 ParseGood = int.TryParse(Console.ReadLine(), out index);
-            } while (!(ParseGood && (index > 0 && index <= count)));
+            } while (!(ParseGood && (index >= 0 && index <= count)));
+
+            if (index == 0)
+                throw new ExitExeption();
 
             return index - 1;
         }

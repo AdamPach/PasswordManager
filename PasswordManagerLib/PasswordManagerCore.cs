@@ -40,9 +40,11 @@ namespace PasswordManagerLib
         }
 
           /// <summary>
-          /// Method for create a new account
+          /// Mehtod create a new accoutn
           /// </summary>
-          /// <param name="newAccount">Account which you want add</param>
+          /// <param name="name">Account name</param>
+          /// <param name="password">Passowrd for account</param>
+          /// <returns>Return true if password is valid</returns>
           public bool CreateAccount(string name, string password)
           {
             try
@@ -135,6 +137,29 @@ namespace PasswordManagerLib
             {
                 this.LoggedAccount.RemoveRecord(RecordIndex);
                 WriteAccountFile(this.AccountsSerializer, this.Accounts);
+                return true;
+            }
+            else throw new NotLoggedExeption("");
+        }
+
+
+        /// <summary>
+        /// Edit record on specific index. If you enter empty string your record will not change
+        /// </summary>
+        /// <param name="index">Index of record</param>
+        /// <param name="newServer">New url</param>
+        /// <param name="newServiceName">New Service Name</param>
+        /// <param name="newUsername">New Username</param>
+        /// <param name="newPassword">New Password</param>
+        /// <returns>Return true if record is updated</returns>
+        public bool EditRecordOnIndex(int index, string newServer, string newServiceName, string newUsername, string newPassword)
+        {
+            if (IsLogged)
+            {
+                LoggedAccount.Records[index].EditRecord(newServer, newServiceName, newUsername, newPassword);
+
+                SaveAccounts();
+
                 return true;
             }
             else throw new NotLoggedExeption("");
