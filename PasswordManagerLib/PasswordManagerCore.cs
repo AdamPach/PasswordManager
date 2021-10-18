@@ -18,7 +18,7 @@ namespace PasswordManagerLib
         public List<Account> Accounts { get; private set; }
         public bool AccountsIsEmpty { get; private set; }
         private XmlSerializer AccountsSerializer = new XmlSerializer(typeof(List<Account>));
-        public Account loggedAccount { get; private set; }
+        private Account LoggedAccount { get;  set; }
 
         public PasswordManagerCore()
         {
@@ -65,10 +65,10 @@ namespace PasswordManagerLib
           /// <returns>If account is remove return true</returns>
           public bool RemoveAccount()
           {
-                if (this.IsLogged && this.loggedAccount != null)
+                if (this.IsLogged && this.LoggedAccount != null)
                 {
-                    this.Accounts.Remove(this.loggedAccount);
-                    this.loggedAccount = null;
+                    this.Accounts.Remove(this.LoggedAccount);
+                    this.LoggedAccount = null;
                     this.IsLogged = false;
                     this.SaveAccounts();
                     return true;
@@ -95,7 +95,7 @@ namespace PasswordManagerLib
              if(this.Accounts[AccountIndex].Password.ComparePasswords(password))
              {
                 this.IsLogged = true;
-                this.loggedAccount = this.Accounts[AccountIndex];
+                this.LoggedAccount = this.Accounts[AccountIndex];
                 return true;
              }
              else
@@ -110,7 +110,7 @@ namespace PasswordManagerLib
         public void LogOut()
         {
              this.IsLogged = false;
-             this.loggedAccount = null;
+             this.LoggedAccount = null;
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace PasswordManagerLib
         {
             if (this.IsLogged)
             {
-                this.loggedAccount.AddRecord(newRecord);
+                this.LoggedAccount.AddRecord(newRecord);
                 WriteAccountFile(this.AccountsSerializer, this.Accounts);
                 return true;
             }
@@ -133,7 +133,7 @@ namespace PasswordManagerLib
         {
             if (IsLogged)
             {
-                this.loggedAccount.RemoveRecord(RecordIndex);
+                this.LoggedAccount.RemoveRecord(RecordIndex);
                 WriteAccountFile(this.AccountsSerializer, this.Accounts);
                 return true;
             }
@@ -148,7 +148,7 @@ namespace PasswordManagerLib
         {
              if(this.IsLogged)
              {
-                return this.loggedAccount.Records;
+                return this.LoggedAccount.Records;
              } else throw new NotLoggedExeption("You are not auth!");
         }
 
@@ -164,7 +164,7 @@ namespace PasswordManagerLib
             {
                 try
                 {
-                    return this.loggedAccount.Search(serviceName);
+                    return this.LoggedAccount.Search(serviceName);
 
                 }catch(KeyNotFoundException e)
                 {
