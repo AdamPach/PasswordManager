@@ -126,7 +126,7 @@ namespace PasswordManagerLib
             if (this.IsLogged)
             {
                 this.LoggedAccount.AddRecord(newRecord);
-                WriteAccountFile(this.AccountsSerializer, this.Accounts);
+                SaveAccounts();
                 return true;
             }
             else throw new NotLoggedExeption("");
