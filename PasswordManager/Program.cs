@@ -31,7 +31,7 @@ namespace PasswordManager
                     {
                         Prompt.LoggedPrompt(ps);
                     }
-                }catch(NotLoggedExeption e)
+                }catch(NotLoggedExeption)
                 {
                     ps.LogOut();
                 }

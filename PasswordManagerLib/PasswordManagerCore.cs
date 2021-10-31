@@ -3,6 +3,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PasswordManagerLib
 {
@@ -52,7 +53,7 @@ namespace PasswordManagerLib
                 Account newAccount = new Account(name, password, name + ".xml");
                 this.Accounts.Add(newAccount);
                 this.SaveAccounts();
-            }catch(IsInvalidPasswordExeption e)
+            }catch(IsInvalidPasswordExeption)
             {
                 return false;
             }
@@ -191,7 +192,7 @@ namespace PasswordManagerLib
                 {
                     return this.LoggedAccount.Search(serviceName);
 
-                }catch(KeyNotFoundException e)
+                }catch(KeyNotFoundException)
                 {
                     return new List<AccountRecord>();
                 }
@@ -249,15 +250,18 @@ namespace PasswordManagerLib
           ///<summary>
           ///Static method for Write Accounts to save file
           ///</summary>
-        private static void WriteAccountFile(XmlSerializer xmlSerializer, List<Account> accounts)
+        private async static void WriteAccountFile(XmlSerializer xmlSerializer, List<Account> accounts)
         {
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
             //Create a xmlWriter
             using(XmlWriter xmlWriter = XmlWriter.Create(AccountFile, settings))
             {
-                //Write into a account file
-                xmlSerializer.Serialize(xmlWriter, accounts);
+                //Write into a account file async
+                await Task.Run(()=> 
+                {
+                    xmlSerializer.Serialize(xmlWriter, accounts);
+                });
             }
         }
 
