@@ -13,16 +13,25 @@ namespace PasswordManager
         public static void AddAccount(PasswordManagerCore ps)
         {
             string name, Password;
-            do
+            try
             {
-                System.Console.WriteLine("You are creating a account");
-                System.Console.Write("Input Account Name: ");
-                name = Console.ReadLine();
+                do
+                {
+                    System.Console.WriteLine("You are creating a account\nEnter 0 into Account name if you want interrupt create account");
+                    System.Console.Write("Input Account Name: ");
+                    name = Console.ReadLine();
+                    if(name == "0")
+                        throw new ExitExeption();
 
-                System.Console.Write("Input Account Password: ");
-                Password = ReturnValidPassword();
+                    System.Console.Write("Input Account Password: ");
+                    Password = ReturnValidPassword();
 
-            } while (!ps.CreateAccount(name, Password));
+                } while (!ps.CreateAccount(name, Password));
+            }
+            catch(ExitExeption)
+            {
+                return;
+            }
         }
 
         public static void RemoveAccount(PasswordManagerCore ps)
@@ -74,21 +83,31 @@ namespace PasswordManager
 
         public static void AddRecord(PasswordManagerCore ps)
         {
-            System.Console.WriteLine();
-            System.Console.Write("Enter a url: ");
-            string url = Console.ReadLine();
+            try
+            {
+                System.Console.WriteLine();
+                System.Console.WriteLine("Enter 0 into url if you want interrupt Add record");
+                System.Console.Write("Enter a url: ");
+                string url = Console.ReadLine();
+                if(url == "0")
+                    throw new ExitExeption();
 
-            System.Console.Write("Enter a Service Name: ");
-            string ServiceName = Console.ReadLine();
+                System.Console.Write("Enter a Service Name: ");
+                string ServiceName = Console.ReadLine();
 
-            System.Console.Write("Enter a Username: ");
-            string username = Console.ReadLine();
+                System.Console.Write("Enter a Username: ");
+                string username = Console.ReadLine();
 
-            Console.Write("Enter password: ");
-            string password = Console.ReadLine();
+                Console.Write("Enter password: ");
+                string password = Console.ReadLine();
 
 
-            ps.AddRecord(new AccountRecord(username, password, url, ServiceName));
+                ps.AddRecord(new AccountRecord(username, password, url, ServiceName));
+            } 
+            catch (ExitExeption)
+            {
+                return;
+            }
         }
 
         public static void ListRecords(PasswordManagerCore ps)
