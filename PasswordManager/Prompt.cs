@@ -14,7 +14,7 @@ namespace PasswordManager
         public static void NoLoggedPrompt(PasswordManagerCore ps)
         {
             System.Console.Write($"{PromptPrefix}");
-            string command = Console.ReadLine().ToLower();
+            string command = EnterComand().ToLower();
 
             switch (command)
             {
@@ -47,7 +47,7 @@ namespace PasswordManager
         public static void LoggedPrompt(PasswordManagerCore ps)
         {
             System.Console.Write($"{PromptPrefix}");
-            string command = Console.ReadLine().ToLower();
+            string command = EnterComand().ToLower();
 
             switch (command)
             {
@@ -106,5 +106,57 @@ namespace PasswordManager
             System.Console.WriteLine();
         }
 
+        private static string EnterComand()
+        {
+            StringBuilder command = new StringBuilder();
+            ConsoleKeyInfo key;
+            do
+            {
+                key = Console.ReadKey(true);
+                switch(key.Key)
+                {
+                    case ConsoleKey.Tab:
+                    {
+                        var matches = Autocomplete.Complete(command.ToString());
+                        if(matches.Count() > 1)
+                            break;
+                        ClearPropmt(command.Length);
+                        command.Clear();
+                        command.Append(matches.ElementAt(0));
+                        Console.Write(command.ToString());
+                        break;
+                    }
+                    case ConsoleKey.Backspace:
+                    {
+                        if(command.Length > 0)
+                        {
+                            command.Remove(command.Length - 1, 1);
+                            Console.Write("\b \b");
+                        }
+                        break;
+                    }
+                    default:
+                    {
+                        if(key.Key != ConsoleKey.Enter)
+                        {
+                            command.Append(key.KeyChar);
+                            Console.Write(key.KeyChar);
+                        }
+                        break;
+                    }
+                }
+
+            }while(key.Key != ConsoleKey.Enter);
+
+            return command.ToString();
+        }
+
+        private static void ClearPropmt(int PromptLenght)
+        {
+            for (int i = 0; i < PromptLenght; i++)
+            {
+                Console.Write("\b \b");
+            }
+        }
     }
 }
