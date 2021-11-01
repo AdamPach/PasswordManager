@@ -102,7 +102,7 @@ namespace PasswordManager
                 string password = Console.ReadLine();
 
 
-                ps.AddRecord(new AccountRecord(username, password, url, ServiceName));
+                ps.AddRecord(username, password, url, ServiceName);
             } 
             catch (ExitExeption)
             {

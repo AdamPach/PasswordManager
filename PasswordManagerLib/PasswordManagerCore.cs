@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace PasswordManagerLib
 {
@@ -74,6 +75,7 @@ namespace PasswordManagerLib
                     this.LoggedAccount = null;
                     this.IsLogged = false;
                     this.SaveAccounts();
+                    GC.Collect();
                     return true;
                 }
                 else throw new NotLoggedExeption("You are not auth!");
@@ -95,7 +97,16 @@ namespace PasswordManagerLib
         /// <returns>If you log succesfull return true</returns>
         public bool LogIn(int AccountIndex,string password)
         {
-             if(this.Accounts[AccountIndex].Password.ComparePasswords(password))
+            if (Accounts.ElementAt(AccountIndex).CanILogIn(password))
+            {
+                IsLogged = true;
+                LoggedAccount = Accounts.ElementAt(AccountIndex);
+                LoggedAccount.LogIn(password);
+                return true;
+            }
+            else return false;
+
+             /*if(this.Accounts[AccountIndex].Password.ComparePasswords(password))
              {
                 this.IsLogged = true;
                 this.LoggedAccount = this.Accounts[AccountIndex];
@@ -104,7 +115,7 @@ namespace PasswordManagerLib
              else
              {
                 return false;
-             }
+             }*/
         }
 
         /// <summary>
@@ -112,8 +123,9 @@ namespace PasswordManagerLib
         /// </summary>
         public void LogOut()
         {
-             this.IsLogged = false;
-             this.LoggedAccount = null;
+            LoggedAccount.LogOut();
+            IsLogged = false;
+            LoggedAccount = null;
         }
 
         /// <summary>
@@ -121,11 +133,12 @@ namespace PasswordManagerLib
         /// </summary>
         /// <param name="newRecord"></param>
         /// <returns></returns>
-        public bool AddRecord(AccountRecord newRecord)
-        {
+        public bool AddRecord(string name, string password, string url, string serviceName)
+        {   
+
             if (this.IsLogged)
             {
-                this.LoggedAccount.AddRecord(newRecord);
+                this.LoggedAccount.AddRecord(name, password, url, serviceName);
                 SaveAccounts();
                 return true;
             }
@@ -157,7 +170,7 @@ namespace PasswordManagerLib
         {
             if (IsLogged)
             {
-                LoggedAccount.Records[index].EditRecord(newServer, newServiceName, newUsername, newPassword);
+                LoggedAccount.EditAccount(index, newServer, newServiceName, newUsername, newPassword);
 
                 SaveAccounts();
 

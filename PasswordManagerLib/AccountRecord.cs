@@ -1,24 +1,29 @@
 
+using System.Xml.Serialization;
+
 namespace PasswordManagerLib
 {
     public class AccountRecord
     {
         public string Username { get; set; }
-        public string Password { get; set; }
+        public RecordPassword Password { get; set; }
         public string Server { get; set; }
         public string ServiceName { get; set; }
+        [XmlIgnore]
+        public byte[] Key { get; set; }
 
         public AccountRecord(){}
 
-        public AccountRecord(string Username, string Password, string Server, string ServiceName)
+        public AccountRecord(string Username, string Password, string Server, string ServiceName, byte[] hash)
         {
             this.Username = Username;
-            this.Password = Password;
+            this.Password = new RecordPassword(Password, hash);
+            Key = hash;
             this.Server = Server;
             this.ServiceName = ServiceName;
         }
 
-        public void EditRecord(string newServer, string newServiceName, string newUsername, string newPassword)
+        public void EditRecord(string newServer, string newServiceName, string newUsername, string newPassword, byte[] hash)
         {
             if (newServer != "")
             {
@@ -34,13 +39,13 @@ namespace PasswordManagerLib
             }
             if (newPassword != "")
             {
-                Password = newPassword;
+                Password.ChangePassword(newPassword, hash);
             }
         }
 
         public override string ToString()
         {
-            return $"Service: {ServiceName}\n\tServer: {Server}\n\tUsername: {Username}\n\tPassword: {Password}\n";
+            return $"Service: {ServiceName}\n\tServer: {Server}\n\tUsername: {Username}\n\tPassword: {Password.DecryptString(Key)}\n";
         }
     }
 }
