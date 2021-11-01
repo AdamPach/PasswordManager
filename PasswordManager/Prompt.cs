@@ -118,8 +118,10 @@ namespace PasswordManager
                     case ConsoleKey.Tab:
                     {
                         var matches = Autocomplete.Complete(command.ToString());
-                        if(matches.Count() > 1)
-                            break;
+                            if (matches.Count() > 1)
+                                break;
+                            else if (matches.Count() == 0)
+                                break;
                         ClearPropmt(command.Length);
                         command.Clear();
                         command.Append(matches.ElementAt(0));
