@@ -12,7 +12,7 @@ namespace PasswordManager
 
         public static void PrintHelp(bool IsLogged)
         {
-            System.Console.WriteLine("Help for PasswordManager");
+            System.Console.WriteLine("\nHelp for PasswordManager");
             Console.WriteLine();
 
             if (IsLogged)

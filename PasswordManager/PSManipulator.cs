@@ -17,7 +17,7 @@ namespace PasswordManager
             {
                 do
                 {
-                    System.Console.WriteLine("You are creating a account\nEnter 0 into Account name if you want interrupt create account");
+                    System.Console.WriteLine("\nYou are creating a account\nEnter 0 into Account name if you want interrupt create account");
                     System.Console.Write("Input Account Name: ");
                     name = Console.ReadLine();
                     if(name == "0")
