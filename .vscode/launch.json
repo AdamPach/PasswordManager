@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/PasswordManager/bin/Debug/net5.0/PasswordManager.dll",
+            "program": "${workspaceFolder}/PasswordManager/bin/Debug/net6.0/PasswordManager.dll",
             "args": [],
             "cwd": "${workspaceFolder}/PasswordManager",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
