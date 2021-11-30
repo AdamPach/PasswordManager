@@ -1,25 +1,29 @@
+using PasswordManagerLib.Manipulators;
+using PasswordManagerLib.Models;
+
 namespace PasswordManagerLib.Initialize;
 
 public class Init
 {
-    private static string AppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager");
-
-    public static void InitRepo()
+    public async static Task InitRepo()
     {
         //Check if Folder exist
-        if(!Directory.Exists(AppData))
+        if(!Directory.Exists(Statics.AppData))
         {
             //Create a folder
-            Directory.CreateDirectory(AppData);
+            Directory.CreateDirectory(Statics.AppData);
             //Create file for all acounts
 
+            IAccountsManipulator writer = new XmlAccountsManipulator();
+            await writer.WriteAccounst(new List<Account>(), Statics.AccountsFile);
             return;
         }
         else 
         {
-            if(!File.Exists(Path.Combine(AppData, "Accounts.xml")))
+            if(!File.Exists(Statics.AppData))
             {
-                //Create file for all accounts if file doesnt exits
+                 IAccountsManipulator writer = new XmlAccountsManipulator();
+                await writer.WriteAccounst(new List<Account>(), Statics.AccountsFile);
             }
             return;
         }
