@@ -11,8 +11,14 @@ public class Prompt
         _Manager = Manager;
     }
 
+
+    private bool ProgramRunning;
     public void Start()
     {
+        ProgramRunning = true;
+        while(ProgramRunning)
+        {
 
+        }
     }
 }
