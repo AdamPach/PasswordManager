@@ -20,7 +20,7 @@ public class Init
         }
         else 
         {
-            if(!File.Exists(Statics.AppData))
+            if(!File.Exists(Statics.AccountsFile))
             {
                  IAccountsManipulator writer = new XmlAccountsManipulator();
                 await writer.WriteAccounst(new List<Account>(), Statics.AccountsFile);
