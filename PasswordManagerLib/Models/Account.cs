@@ -1,4 +1,5 @@
 using System.Xml.Serialization;
+using PasswordManagerLib.Crypto;
 
 namespace PasswordManagerLib.Models;
 
@@ -13,5 +14,10 @@ public class Account
         {
             return Name + ".xml";
         }
-    }  
+    }
+
+    public async Task<bool> ComparePassword(IPasswordComparator comparator, string password)
+    {
+        return await comparator.ComparePassword(Password, password);
+    }
 }
