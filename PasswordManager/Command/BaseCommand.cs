@@ -3,9 +3,10 @@ namespace PasswordManager.Command;
 public abstract class BaseCommand
 {
     //Default properties for all comands
-    protected string  CommandName { get; set; }
-    protected string Description { get; set; }
+    public string  CommandName { get; protected set; }
+    public string Description { get; protected set; }
     //Abstract mothods and events
-    public abstract event Action CommandEvent;
+    protected abstract event Action CommandEvent;
+    public abstract void RegisterEvent(Action Event);
     public abstract void Execute();
 }
