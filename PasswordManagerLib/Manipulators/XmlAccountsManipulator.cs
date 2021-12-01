@@ -25,4 +25,14 @@ public class XmlAccountsManipulator : IAccountsManipulator
 
         return true;
     }
+
+    public async Task<List<Account>> ReadAccounts(string AccountFileName)
+    {
+        using(XmlReader reader = XmlReader.Create(AccountFileName))
+        {
+           List<Account> accounts;
+           accounts = await Task.Run<List<Account>>(() => (List<Account>)serializer.Deserialize(reader));
+           return accounts;
+        }
+    }
 }
