@@ -1,9 +1,15 @@
 ﻿using PasswordManager.Printer;
+using PasswordManager.Command;
 using PasswordManagerLib;
+using PasswordManager;
 
 await PasswordManagerLib.Initialize.Init.InitRepo();
 
 ICore Manager = new Core();
-var Prompt = new Prompt(Manager);
+var commandContainer = new CommandContainer();
 
-Prompt.Start();
+ConfigureCommandContainer.Configure(Manager, commandContainer);
+
+var Prompt = new Prompt(Manager, commandContainer);
+
+await Prompt.Start();

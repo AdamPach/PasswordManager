@@ -9,14 +9,14 @@ namespace PasswordManager.Command
             Description = "Enter exit when you need exit program";
         }
         
-        protected override event Action CommandEvent;
+        protected override event CommandExecution CommandEvent;
 
-        public override void Execute()
+        public async override Task Execute()
         {
-            CommandEvent();
+            await CommandEvent();
         }
 
-        public override void RegisterEvent(Action Event)
+        public override void RegisterEvent(CommandExecution Event)
         {
             CommandEvent += Event;
         }
