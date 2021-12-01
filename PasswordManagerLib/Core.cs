@@ -1,3 +1,4 @@
+using PasswordManagerLib.Crypto;
 using PasswordManagerLib.Manipulators;
 using PasswordManagerLib.Models;
 
@@ -8,7 +9,9 @@ public class Core : ICore
     private IAccountsManipulator manipulator;
     public async Task<Account> CreateAccount(string Name, string Password)
     {
-        Account NewAccount = new Account{Name = Name, Password = Password};
+        IPasswordHasher hasher = new SHA256PasswordHasher();
+
+        Account NewAccount = new Account{Name = Name, Password = await hasher.HashPassword(Password)};
         //Must create file for this account where you save all passwords
 
         var Accounts = await GetAccountsAsync();
