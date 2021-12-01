@@ -9,16 +9,16 @@ public class Prompt
     private readonly ICore _Manager;
     private readonly CommandContainer _CommandContainer;
 
-    public Prompt(ICore Manager)
+    public Prompt(ICore Manager, CommandContainer commandContainer)
     {
         _Manager = Manager;
-        _CommandContainer = new CommandContainer();
+        _CommandContainer = commandContainer;
         RegisterExit();
     }
 
 
     private bool ProgramRunning;
-    public void Start()
+    public async Task Start()
     {
         ProgramRunning = true;
         while(ProgramRunning)
@@ -27,7 +27,7 @@ public class Prompt
            {
                Console.Write(">: ");
                var command = Console.ReadLine();
-               _CommandContainer.GetCommand(command).Execute();
+               await _CommandContainer.GetCommand(command).Execute();
            }
            catch(InvalidCommandNameExeption)
            {
@@ -43,8 +43,8 @@ public class Prompt
         _CommandContainer.RegisterCommads(exitCommand);
     }
 
-    private void Exit()
+    private async Task Exit()
     {
-        ProgramRunning = false;
+        await Task.Run(() => {ProgramRunning = false;});
     }
 }
