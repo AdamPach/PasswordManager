@@ -12,6 +12,7 @@ public class LoginCommand : BaseCommand
         _core = core;
         CommandName = "login";
         Description = "LogIn - Log in into your account";
+        AuthTag = Tags.AuthTag.DontHavetoBeAuth;
         RegisterCommand();
     }
 

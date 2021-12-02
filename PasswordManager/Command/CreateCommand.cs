@@ -10,7 +10,8 @@ public class CreateCommand : BaseCommand
     {
         _core = core;
         CommandName = "create";
-        Description = "Create account for you and your passwords";   
+        Description = "Create account for you and your passwords";
+        AuthTag = Tags.AuthTag.DontHavetoBeAuth;   
         RegisterCommand();
     }
 

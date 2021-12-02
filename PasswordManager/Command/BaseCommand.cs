@@ -1,3 +1,4 @@
+using PasswordManager.Command.Tags;
 using PasswordManagerLib;
 
 namespace PasswordManager.Command;
@@ -8,6 +9,7 @@ public abstract class BaseCommand
     //Default properties for all comands
     public string  CommandName { get; protected set; }
     public string Description { get; protected set; }
+    public AuthTag AuthTag { get; protected set; }
     //Abstract mothods and events
     protected abstract void RegisterCommand();
     protected event CommandExecution CommandEvent;

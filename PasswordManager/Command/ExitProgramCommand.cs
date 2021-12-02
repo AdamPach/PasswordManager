@@ -5,7 +5,8 @@ namespace PasswordManager.Command
         public ExitProgramCommand()
         {
             CommandName = "exit";
-            Description = "Enter exit when you need exit program";
+            Description = "Exit - Enter exit when you need exit program";
+            AuthTag = Tags.AuthTag.Both;
         }
 
         protected override void RegisterCommand(){}
