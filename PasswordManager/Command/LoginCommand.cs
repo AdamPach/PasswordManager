@@ -1,4 +1,5 @@
 using PasswordManagerLib;
+using PasswordManagerLib.Exeption;
 
 namespace PasswordManager.Command;
 
@@ -24,13 +25,20 @@ public class LoginCommand : BaseCommand
         Console.Write("Enter Username: ");
         var name = Console.ReadLine();
 
-        Console.Write("Enter Password");
+        Console.Write("Enter Password: ");
         var password = Console.ReadLine();
 
-        if(await _core.LogIn(name, password))
-            System.Console.WriteLine("You are log in!");
-        else
-            System.Console.WriteLine("Bad password - try it again");
+        try
+        {
+            if(await _core.LogIn(name, password))
+                System.Console.WriteLine("You are log in!");
+            else
+                System.Console.WriteLine("Bad password!");
+        }
+        catch(NoExistingAccountExeption e)
+        {
+            System.Console.WriteLine(e.Message);
+        }
 
     }
 }
