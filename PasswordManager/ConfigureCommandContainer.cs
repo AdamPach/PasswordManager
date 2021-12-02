@@ -8,5 +8,6 @@ public class ConfigureCommandContainer
     public static void Configure(ICore core, CommandContainer container)
     {
         container.RegisterCommads(new CreateCommand(core));
+        container.RegisterCommads(new LoginCommand(core));
     }
 }
