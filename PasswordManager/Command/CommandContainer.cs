@@ -12,11 +12,17 @@ public class CommandContainer
         Commands = new Dictionary<string, BaseCommand>();
     }
 
-    public BaseCommand GetCommand(string key)
+    public BaseCommand GetCommand(string key, bool IsLogged)
     {
         var command = Commands.GetValueOrDefault(key.ToLower());
         if(command == null) throw new InvalidCommandNameExeption();
-        return command;
+
+        if(IsLogged && command.AuthTag == Tags.AuthTag.DontHavetoBeAuth)
+            throw new EnterCommandWithBadTagExeption("Bad command");
+        else if(!IsLogged && command.AuthTag == Tags.AuthTag.HavetoBeAuth)
+            throw new EnterCommandWithBadTagExeption("You must logged in first");
+
+         return command;
     }
 
     public IEnumerable<string> GetHelp(bool IsLogged)

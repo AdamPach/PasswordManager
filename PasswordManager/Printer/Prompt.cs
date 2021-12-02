@@ -27,11 +27,15 @@ public class Prompt
            {
                Console.Write(">: ");
                var command = Console.ReadLine();
-               await _CommandContainer.GetCommand(command).Execute();
+               await _CommandContainer.GetCommand(command, _core.IsLogged()).Execute();
            }
            catch(InvalidCommandNameExeption)
            {
                PrintHelp(_CommandContainer.GetHelp(_core.IsLogged()));
+           }
+           catch(EnterCommandWithBadTagExeption e)
+           {
+               System.Console.WriteLine(e.Message);
            }
         }
     }
