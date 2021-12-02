@@ -6,12 +6,12 @@ namespace PasswordManager.Printer;
 
 public class Prompt
 {
-    private readonly ICore _Manager;
+    private readonly ICore _core;
     private readonly CommandContainer _CommandContainer;
 
     public Prompt(ICore Manager, CommandContainer commandContainer)
     {
-        _Manager = Manager;
+        _core = Manager;
         _CommandContainer = commandContainer;
         RegisterExit();
     }
@@ -31,7 +31,7 @@ public class Prompt
            }
            catch(InvalidCommandNameExeption)
            {
-
+               PrintHelp(_CommandContainer.GetHelp(_core.IsLogged()));
            }
         }
     }
@@ -41,6 +41,14 @@ public class Prompt
         var exitCommand = new ExitProgramCommand();
         exitCommand.RegisterEvent(Exit);
         _CommandContainer.RegisterCommads(exitCommand);
+    }
+
+    private void PrintHelp(IEnumerable<string> help)
+    {
+        foreach (var item in help)
+        {
+            System.Console.WriteLine(item);
+        }
     }
 
     private async Task Exit()
