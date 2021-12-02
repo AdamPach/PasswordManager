@@ -69,7 +69,6 @@ public class Core : ICore
     private bool CheckDuplicitNames(IEnumerable<Account> accounts, Account NewAccount)
     {
         var account = from a in accounts where NewAccount.Name == a.Name select a;
-        System.Console.WriteLine(account.Count());
         return account.Count() > 0;
     }
 
