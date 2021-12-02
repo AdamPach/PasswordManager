@@ -1,3 +1,4 @@
+using PasswordManager.Printer;
 using PasswordManagerLib;
 using PasswordManagerLib.Exeption;
 
@@ -27,7 +28,7 @@ public class LoginCommand : BaseCommand
         var name = Console.ReadLine();
 
         Console.Write("Enter Password: ");
-        var password = Console.ReadLine();
+        var password = Input.ReadPassword();
 
         try
         {

@@ -1,3 +1,4 @@
+using PasswordManager.Printer;
 using PasswordManagerLib;
 
 namespace PasswordManager.Command;
@@ -26,7 +27,7 @@ public class CreateCommand : BaseCommand
         var name = Console.ReadLine();
 
         Console.Write("Enter password: ");
-        var password = Console.ReadLine();
+        var password = Input.ReadPassword();
 
         await _core.CreateAccount(name, password);
     }
