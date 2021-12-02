@@ -76,4 +76,11 @@ public class Core : ICore
     {
         manipulator = null;
     }
+
+    public async Task LogOut()
+    {
+        await Task.Run(() => {
+            LogedAccount = null;
+        });
+    }
 }
