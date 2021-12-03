@@ -12,5 +12,18 @@ namespace PasswordManagerLib.Models
         public string Url { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
+
+        public Record()
+        {
+
+        }
+
+        public Record(string Name, string Password, string ServiceName, string Url)
+        {
+            this.Name = Name;
+            this.Password = Password;
+            this.ServiceName = ServiceName;
+            this.Url = Url;
+        }
     }
 }

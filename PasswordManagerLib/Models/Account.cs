@@ -1,5 +1,6 @@
 using System.Xml.Serialization;
 using PasswordManagerLib.Crypto;
+using PasswordManagerLib.Manipulators;
 
 namespace PasswordManagerLib.Models;
 
@@ -16,9 +17,29 @@ public class Account
             return Path.Combine(Statics.AppData, fileName);
         }
     }
+    [XmlIgnore]
+    private List<Record> Records;
 
     public async Task<bool> ComparePassword(IPasswordComparator comparator, string password)
     {
         return await comparator.ComparePassword(Password, password);
+    }
+
+    public async Task<Record> CreateRecord(string Name, string Password, string ServiceName, string Url)
+    {
+        var record = new Record(Name, Password, ServiceName, Url);
+
+        Records = (List<Record>)await GetRecords();
+        Records.Add(record);
+
+        await new XmlRecordsManipulator().WriteRecords(Records, AccountFileName);
+
+        Records = null;
+        return record;
+    }
+
+    public async Task<IEnumerable<Record>> GetRecords()
+    {
+        return await new XmlRecordsManipulator().ReadRecords(AccountFileName);
     }
 }

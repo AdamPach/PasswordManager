@@ -17,5 +17,23 @@ public class AddRecordCommand : BaseCommand
 
     protected override void RegisterCommand()
     {
+        CommandEvent += AddRecordAsync;
+    }
+
+    private async Task AddRecordAsync()
+    {
+        Console.Write("Enter Service name: ");
+        var sn = Console.ReadLine();
+
+        Console.Write("Enter Url: ");
+        var Url = Console.ReadLine();
+
+        Console.Write("Enter Name: ");
+        var Name = Console.ReadLine();
+
+        Console.Write("Enter Password: ");
+        var Password = Console.ReadLine();
+
+        await _core.CreateRecord(Name, Password, sn, Url);
     }
 }

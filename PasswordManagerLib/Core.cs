@@ -84,4 +84,9 @@ public class Core : ICore
             LogedAccount = null;
         });
     }
+
+    public async Task<Record> CreateRecord(string Name, string Password, string ServiceName, string Url)
+    {
+        return await LogedAccount.CreateRecord(Name, Password, ServiceName, Url);
+    }
 }
