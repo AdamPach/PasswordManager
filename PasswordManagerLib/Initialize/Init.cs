@@ -28,4 +28,14 @@ public class Init
             return;
         }
     }
+
+    public async static Task CreateAccoutFile(string fileName)
+    {
+        if(!File.Exists(fileName))
+        {
+            IRecordsManipulator writer = new XmlRecordsManipulator();
+            await writer.WriteRecords(new List<Record>(), fileName);
+            return;
+        }
+    }
 }

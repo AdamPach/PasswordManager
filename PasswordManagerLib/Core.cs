@@ -1,5 +1,6 @@
 using PasswordManagerLib.Crypto;
 using PasswordManagerLib.Exeption;
+using PasswordManagerLib.Initialize;
 using PasswordManagerLib.Manipulators;
 using PasswordManagerLib.Models;
 
@@ -12,14 +13,14 @@ public class Core : ICore
     {
         IPasswordHasher hasher = new SHA256PasswordHasher();
 
-        Account NewAccount = new Account{Name = Name, Password = await hasher.HashPassword(Password)};
-        //Must create file for this account where you save all passwords
+        Account NewAccount = new Account { Name = Name, Password = await hasher.HashPassword(Password) };
 
         var Accounts = await GetAccountsAsync();
 
         if(CheckDuplicitNames(Accounts, NewAccount))
             throw new DuplicitAccountNaneExeption("This name is exist!");
 
+        await Init.CreateAccoutFile(NewAccount.AccountFileName);
         Accounts.Add(NewAccount);
         await WriteAccountsAsync(Accounts);
         return NewAccount;

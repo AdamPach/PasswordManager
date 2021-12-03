@@ -12,7 +12,8 @@ public class Account
     { 
         get
         {
-            return Name + ".xml";
+            var fileName = Name + ".xml";
+            return Path.Combine(Statics.AppData, fileName);
         }
     }
 
