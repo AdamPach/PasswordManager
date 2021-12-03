@@ -11,5 +11,6 @@ public class ConfigureCommandContainer
         container.RegisterCommads(new LoginCommand(core));
         container.RegisterCommads(new AddRecordCommand(core));
         container.RegisterCommads(new LogoutCommand(core));
+        container.RegisterCommads(new ReadCommand(core));
     }
 }

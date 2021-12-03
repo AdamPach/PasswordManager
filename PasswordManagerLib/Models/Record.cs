@@ -25,5 +25,10 @@ namespace PasswordManagerLib.Models
             this.ServiceName = ServiceName;
             this.Url = Url;
         }
+
+        public override string ToString()
+        {
+            return $"Service: {ServiceName}\n\tUrl: {Url}\n\tName: {Name}\n\tPassword: {Password}\n\n";
+        }
     }
 }

@@ -89,4 +89,9 @@ public class Core : ICore
     {
         return await LogedAccount.CreateRecord(Name, Password, ServiceName, Url);
     }
+
+    public async Task<IEnumerable<Record>> ReadRecords()
+    {
+        return await LogedAccount.GetRecords();
+    }
 }
