@@ -94,4 +94,22 @@ public class Core : ICore
     {
         return await LogedAccount.GetRecords();
     }
+
+    public async Task<Record> DeleteRecord(string ServiceName)
+    {
+        List<Record> Records = (List<Record>)await LogedAccount.GetRecords();
+
+        Record toRemove = (from r in Records
+                            where r.ServiceName == ServiceName 
+                            select r).FirstOrDefault();
+        
+        if(toRemove == null)
+            throw new NoExistingRecordExeption("You try remove record which doesnt exist!");
+
+        Records.Remove(toRemove);
+
+        await LogedAccount.WriteRecords(Records);
+
+        return toRemove;
+    }
 }

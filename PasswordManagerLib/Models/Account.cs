@@ -32,10 +32,15 @@ public class Account
         Records = (List<Record>)await GetRecords();
         Records.Add(record);
 
-        await new XmlRecordsManipulator().WriteRecords(Records, AccountFileName);
+        await WriteRecords(Records);
 
         Records = null;
         return record;
+    }
+
+    public async Task WriteRecords(IEnumerable<Record> records)
+    {
+        await new XmlRecordsManipulator().WriteRecords(records, AccountFileName);
     }
 
     public async Task<IEnumerable<Record>> GetRecords()
